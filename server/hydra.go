@@ -81,11 +81,11 @@ func (h *Handler) ConsentGet(c echo.Context) error {
 			GrantScope: consent.RequestedScope,
 			Session: &models.ConsentRequestSession{
 				IDToken: map[string]interface{}{
-					"uid":    string(user.Uid),
-					"first":  string(user.First),
-					"last":   string(user.Last),
-					"groups": strings.Join(user.Groups, ";"),
-					"email":  string(user.Email),
+					"uid":         string(user.Uid),
+					"given_name":  string(user.First),
+					"family_name": string(user.Last),
+					"groups":      strings.Join(user.Groups, ";"),
+					"email":       string(user.Email),
 				},
 			}})
 
@@ -177,11 +177,11 @@ func (h *Handler) ConsentPost(c echo.Context) error {
 		RememberFor: viper.GetInt64("hydra_consent_timeout"),
 		Session: &models.ConsentRequestSession{
 			IDToken: map[string]interface{}{
-				"uid":    string(user.Uid),
-				"first":  string(user.First),
-				"last":   string(user.Last),
-				"groups": strings.Join(user.Groups, ";"),
-				"email":  string(user.Email),
+				"uid":         string(user.Uid),
+				"given_name":  string(user.First),
+				"family_name": string(user.Last),
+				"groups":      strings.Join(user.Groups, ";"),
+				"email":       string(user.Email),
 			},
 		}})
 
