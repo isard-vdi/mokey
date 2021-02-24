@@ -9,7 +9,7 @@ import (
 	"github.com/ory/hydra-client-go/client/admin"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/ubccr/goipa"
+	ipa "github.com/ubccr/goipa"
 )
 
 func (h *Handler) tryAuth(uid, password string) (string, error) {
@@ -53,6 +53,11 @@ func (h *Handler) LoginPost(c echo.Context) error {
 		sess.Values[CookieKeyUser] = uid
 		sess.Values[CookieKeySID] = sid
 		sess.Values[CookieKeyAuthenticated] = true
+
+		log.WithFields(log.Fields{
+			"uid": sess.Values[CookieKeyUser],
+			"sid": sess.Values[CookieKeySID],
+		}).Info("User session set in cookie.")
 
 		location := Path("/")
 		wyaf := sess.Values[CookieKeyWYAF]
@@ -108,6 +113,15 @@ func (h Handler) revokeHydraAuthenticationSession(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	log.WithFields(log.Fields{
+		"uid": sess.Values[CookieKeyUser],
+		"sid": sess.Values[CookieKeySID],
+	}).Info("User session values actually in cookie in cookie.")
+
+	log.WithFields(log.Fields{
+		"values": sess.Values,
+	}).Info("All session values actually in cookie in cookie.")
 
 	sid := sess.Values[CookieKeySID]
 	user := sess.Values[CookieKeyUser]
