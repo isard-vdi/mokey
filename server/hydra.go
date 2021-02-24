@@ -82,6 +82,8 @@ func (h *Handler) ConsentGet(c echo.Context) error {
 			Session: &models.ConsentRequestSession{
 				IDToken: map[string]interface{}{
 					"uid":         string(user.Uid),
+					"first":       string(user.First),
+					"last":        string(user.Last),
 					"given_name":  string(user.First),
 					"family_name": string(user.Last),
 					"groups":      strings.Join(user.Groups, ";"),
@@ -178,6 +180,8 @@ func (h *Handler) ConsentPost(c echo.Context) error {
 		Session: &models.ConsentRequestSession{
 			IDToken: map[string]interface{}{
 				"uid":         string(user.Uid),
+				"first":       string(user.First),
+				"last":        string(user.Last),
 				"given_name":  string(user.First),
 				"family_name": string(user.Last),
 				"groups":      strings.Join(user.Groups, ";"),
