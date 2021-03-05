@@ -1,0 +1,14 @@
+{{define "content"}}
+
+<h1 class="page-header"><i class="fa fa-address-card-o"></i> Top Div</h1>
+{{ .user.First }} - {{ .user.Last }} {{ .user.Uid }} - {{ .user.PasswdExpire.Format "Jan 02, 2006 15:04:05 MST" }} - {{ .user.Email }} - 
+
+<div class="form-control-static">
+    {{ range $g := .user.Groups }}
+        <span class="label label-default">{{ $g }}</span> 
+    {{ else }}
+        &nbsp;
+    {{ end }}
+</div>
+
+{{end}}

@@ -10,7 +10,7 @@ import (
 	hydra "github.com/ory/hydra-client-go/client"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/ubccr/goipa"
+	ipa "github.com/ubccr/goipa"
 	"github.com/ubccr/mokey/model"
 	"github.com/ubccr/mokey/util"
 	"golang.org/x/oauth2"
@@ -147,6 +147,7 @@ func (h *Handler) SetupRoutes(e *echo.Echo) {
 	e.GET(Path("/otptokens"), LoginRequired(h.OTPTokens)).Name = "otptokens"
 	e.POST(Path("/otptokens"), LoginRequired(h.ModifyOTPTokens))
 	e.Match([]string{"GET", "POST"}, Path("/2fa"), LoginRequired(h.TwoFactorAuth))[0].Name = "2fa"
+	e.GET(Path("/header-div"), LoginRequired(h.HeaderDiv)).Name = "header-div"
 
 	if viper.IsSet("hydra_admin_url") {
 		e.GET(Path("/oauth/consent"), h.ConsentGet).Name = "consent"
@@ -176,6 +177,18 @@ func (h *Handler) Index(c echo.Context) error {
 		"user": user.(*ipa.UserRecord)}
 
 	return c.Render(http.StatusOK, "index.html", vars)
+}
+
+func (h *Handler) HeaderDiv(c echo.Context) error {
+	user := c.Get(ContextKeyUser)
+	if user == nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user")
+	}
+
+	vars := map[string]interface{}{
+		"user": user.(*ipa.UserRecord)}
+
+	return c.Render(http.StatusOK, "header_div.html", vars)
 }
 
 func (h *Handler) removeAllOTPTokens(uid string) error {
