@@ -147,7 +147,7 @@ func (h *Handler) SetupRoutes(e *echo.Echo) {
 	e.GET(Path("/otptokens"), LoginRequired(h.OTPTokens)).Name = "otptokens"
 	e.POST(Path("/otptokens"), LoginRequired(h.ModifyOTPTokens))
 	e.Match([]string{"GET", "POST"}, Path("/2fa"), LoginRequired(h.TwoFactorAuth))[0].Name = "2fa"
-	e.GET(Path("/header-div"), LoginRequired(h.HeaderDiv)).Name = "header-div"
+	e.GET(Path("/apps"), LoginRequired(h.Apps)).Name = "apps"
 
 	if viper.IsSet("hydra_admin_url") {
 		e.GET(Path("/oauth/consent"), h.ConsentGet).Name = "consent"
@@ -179,7 +179,7 @@ func (h *Handler) Index(c echo.Context) error {
 	return c.Render(http.StatusOK, "index.html", vars)
 }
 
-func (h *Handler) HeaderDiv(c echo.Context) error {
+func (h *Handler) Apps(c echo.Context) error {
 	user := c.Get(ContextKeyUser)
 	if user == nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user")
@@ -188,7 +188,7 @@ func (h *Handler) HeaderDiv(c echo.Context) error {
 	vars := map[string]interface{}{
 		"user": user.(*ipa.UserRecord)}
 
-	return c.Render(http.StatusOK, "header_div.html", vars)
+	return c.Render(http.StatusOK, "apps.html", vars)
 }
 
 func (h *Handler) removeAllOTPTokens(uid string) error {
